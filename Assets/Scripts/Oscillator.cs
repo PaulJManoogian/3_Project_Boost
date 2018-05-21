@@ -24,7 +24,11 @@ public class Oscillator : MonoBehaviour {
     {
 
         // set movement factor automatically
-        //todo protect against period is divide by zero.
+        //protect against period is divide by zero.
+        if (period <= Mathf.Epsilon)
+        {
+            return;
+        }
         float cycles = Time.time / period; // grows continually from 0
 
         const float tau = Mathf.PI * 2; // about 6.28
