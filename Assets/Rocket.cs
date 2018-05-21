@@ -1,15 +1,22 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿//using System;
+//using System.Collections;
+//using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
+//todo - Fix lighting bug
 
 public class Rocket : MonoBehaviour {
 
     [SerializeField] float rcsThrust = 100f;
     [SerializeField] float mainThrust = 100f;
+    [SerializeField] float sceneSwitchWait = 1f;
 
     Rigidbody rigidBody;
     AudioSource audioSource;
+
+  enum State { alive, dying, transcending }
+    State state = State.alive;
 
 	// Use this for initialization
 	void Start () {
@@ -19,35 +26,63 @@ public class Rocket : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        Thrust();
-        Rotate();
+        //todo somewhere stop sound on death
+        if (state == State.alive)
+        {
+            Thrust();
+            Rotate();
+        }
 	}
 
 
     private void OnCollisionEnter(Collision collision)
     {
-        switch(collision.gameObject.tag)
+      if (state != State.alive)
+        {
+            return; // ignore collisions when dead
+        }
+
+        switch (collision.gameObject.tag)
         {
             case "Friendly":
                 {
-                    print("Collided - Friendly");
+                   // print("Collided - Friendly");
                     break;
                 }
        
-            case "Fuel":
+            case "Finish":
                 {
-                    print("Collided - Fuel");
+                    state = State.transcending;
+                    print("Collided - Hit Finish");
+                    Invoke("LoadNextScene",sceneSwitchWait); //param this time
+
                     break;
                 }
             default:
                 {
                     print("Collided - Dead");  // kill player
+                    state = State.dying;
+                    print("Collided - Hit Finish");
+                    Invoke("LoadFirstScene", sceneSwitchWait); //param this time
                     break;
                 }
         }
 
         
     }
+
+
+    private void LoadFirstScene()
+    {
+        SceneManager.LoadScene(0); //allow for more than two levels
+    }
+
+
+    private void LoadNextScene()
+    {
+        SceneManager.LoadScene(1); //allow for more than two levels
+    }
+
 
     private void Thrust()
     {

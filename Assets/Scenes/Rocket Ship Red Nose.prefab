@@ -147,7 +147,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1203124710049692}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.03303349, y: 1.93, z: -0.3}
+  m_LocalPosition: {x: -25, y: 5.99, z: -0.3}
   m_LocalScale: {x: 1, y: 1.1646558, z: 1}
   m_Children:
   - {fileID: 4001016072873256}
@@ -345,13 +345,13 @@ Rigidbody:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1203124710049692}
   serializedVersion: 2
-  m_Mass: 0.08
+  m_Mass: 1
   m_Drag: 0.25
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 56
   m_CollisionDetection: 0
 --- !u!65 &65108169971570186
 BoxCollider:
@@ -395,7 +395,7 @@ AudioSource:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1203124710049692}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 531a808d8651f644e8273468cfc59627, type: 3}
@@ -495,7 +495,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d8452e98dd58834a8ccabc8e64880e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rcsThrust: 100
+  rcsThrust: 250
+  mainThrust: 50
 --- !u!135 &135892326842168406
 SphereCollider:
   m_ObjectHideFlags: 1
