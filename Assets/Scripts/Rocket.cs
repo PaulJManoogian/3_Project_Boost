@@ -1,6 +1,7 @@
 ﻿//using System;
 //using System.Collections;
 //using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -23,8 +24,12 @@ public class Rocket : MonoBehaviour
     Rigidbody rigidBody;
     AudioSource audioSource;
 
-  enum State { alive, dying, transcending }
+    enum State { alive, dying, transcending }
     State state = State.alive;
+
+    bool collisionsDisabled = false;
+
+
 
 	// Use this for initialization
 	void Start ()
@@ -41,16 +46,33 @@ public class Rocket : MonoBehaviour
             RespondToThrust();
             RespondToRotation();
         }
+        if (Debug.isDebugBuild)
+        {
+            RespondToDebugKeys();
+        }
 	}
+
+
+    //todo debug keys - remove?
+    private void RespondToDebugKeys()
+    {
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            LoadNextScene();
+        }
+        else if (Input.GetKeyDown(KeyCode.C))
+        {
+            // toggle collision
+            collisionsDisabled = !collisionsDisabled;
+        }
+    }
+
 
 
     private void OnCollisionEnter(Collision collision)
     {
-      if (state != State.alive)
-        {
-            return; // ignore collisions when dead
-        }
-
+      if (state != State.alive || collisionsDisabled) { return; }
+        
         switch (collision.gameObject.tag)
         {
             case "Friendly":
@@ -103,7 +125,13 @@ public class Rocket : MonoBehaviour
 
     private void LoadNextScene()
     {
-        SceneManager.LoadScene(1); //allow for more than two levels
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        int nextSceneIndex = currentSceneIndex + 1;
+        if (nextSceneIndex == SceneManager.sceneCountInBuildSettings)
+        {
+            nextSceneIndex = 0; // loop back to start
+        }
+        SceneManager.LoadScene(nextSceneIndex); //allow for more than two levels
     }
 
 
